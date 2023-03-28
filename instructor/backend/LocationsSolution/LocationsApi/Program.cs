@@ -1,3 +1,5 @@
+using LocationsApi;
+using LocationsApi.Adapters;
 using LocationsApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var onCallAddress = builder.Configuration.GetValue<string>("onCallAddress");
+if (onCallAddress is null)
+{
+    throw new Exception("Can't start API without the onCallAddress");
+}
+Console.WriteLine($"Using the API address of {onCallAddress}");
+builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
+{
+    client.BaseAddress = new Uri(onCallAddress); // TODO DON'T DO THIS.
+}).AddPolicyHandler(SrePolicies.GetDefaultRetyPolicyAsync())
+.AddPolicyHandler(SrePolicies.GetDefaultCircuitBreaker());
 
 var clock = new UptimeClock();
 builder.Services.AddSingleton<UptimeClock>(clock);
