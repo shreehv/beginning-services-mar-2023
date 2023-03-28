@@ -23,7 +23,22 @@ public class StatusController : ControllerBase
     public async Task<ActionResult> GetStatus()
     {
         var sinceStartup =  DateTime.Now - _clock.UpSince;
-        var contactInfo = await _adapter.GetContactInfoAsync();
+        ContactInfo? contactInfo;
+        try
+        {
+            contactInfo = await _adapter.GetContactInfoAsync();
+        }
+        catch (Exception)
+        {
+
+            //contactInfo = new ContactInfo
+            //{
+            //    Name = "Front Desk",
+            //    Email = "frontdesk@company.com",
+            //    Phone = "888-2828"
+            //};
+            contactInfo = null;
+        }
         var response = new GetStatusResponse()
         {
                ContactInfo = contactInfo,
