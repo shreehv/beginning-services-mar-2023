@@ -27,6 +27,8 @@ type SupportModel = {
   uptime: {
     days: number,
     hours: number,
-    minutes: number
+    minutes: number,
+    seconds: number,
+    milliseconds: number
   }
 }

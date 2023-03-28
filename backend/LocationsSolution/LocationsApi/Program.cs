@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
     });
 });
 var app = builder.Build();
+app.UseCors();
 // This would have been in the Configure method in startup
 // the thing that will actually handle incoming requests.
 // Configure the HTTP request pipeline.
