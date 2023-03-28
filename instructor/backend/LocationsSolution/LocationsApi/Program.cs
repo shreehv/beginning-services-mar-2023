@@ -12,9 +12,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var onCallAddress = builder.Configuration.GetValue<string>("onCallAddress");
+if(onCallAddress is null)
+{
+    throw new Exception("Can't start API without the onCallAddress");
+}
+Console.WriteLine($"Using the API address of {onCallAddress}");
 builder.Services.AddHttpClient<OnCallDeveloperHttpAdapter>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:1338"); // TODO DON'T DO THIS.
+    client.BaseAddress = new Uri(onCallAddress); // TODO DON'T DO THIS.
 });
 
 var clock = new UptimeClock();
