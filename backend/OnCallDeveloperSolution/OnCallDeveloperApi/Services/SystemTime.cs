@@ -1,11 +1,15 @@
-﻿namespace OnCallDeveloperApi.Services
+﻿namespace OnCallDeveloperApi.Services;
+
+public interface ISystemTime
 {
-    public interface ISystemTime
+    DateTime GetCurrent();
+}
+
+public class SystemTime : ISystemTime
+{
+   // public DateTime GetCurrent() => DateTime.Now;
+   public DateTime GetCurrent()
     {
-        DateTime GetCurrent();
+        return DateTime.Now;
     }
-    public class SystemTime : ISystemTime
-    {
-        public DateTime GetCurrent() => DateTime.Now;
-    }    
 }

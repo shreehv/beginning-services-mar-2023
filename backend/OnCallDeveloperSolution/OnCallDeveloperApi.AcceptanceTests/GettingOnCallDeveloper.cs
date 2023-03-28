@@ -2,8 +2,9 @@
 using OnCallDeveloperApi;
 using Alba;
 using OnCallDeveloperApi.Models;
-using Moq;
 using OnCallDeveloperApi.Services;
+using Moq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OnCallDeveloperApi.AcceptanceTests;
 
@@ -20,7 +21,7 @@ public class GettingOnCallDeveloper
             {
                 var stubbedSupportSchedule = new Mock<IProvideSupportSchedule>();
                 stubbedSupportSchedule.Setup(sched => sched.InternalSupportAvailable).Returns(true);
-                services.AddScoped<IProvideSupportSchedule>((_) =>stubbedSupportSchedule.Object);               
+                services.AddScoped<IProvideSupportSchedule>((_) => stubbedSupportSchedule.Object);
             });
         });
 
@@ -32,7 +33,7 @@ public class GettingOnCallDeveloper
 
         var expected = new OnCallDeveloperModel
         {
-            Name = "Bob Smith",
+            Name = "Bob Smith", 
             Phone = "888-8888",
             Email = "bob@company.com"
         };
@@ -46,7 +47,15 @@ public class GettingOnCallDeveloper
     {
         // we need the web server up and running - we are doing "in memory" here,
         // it doesn't really start a publicly exposed http server.
-        await using var host = await AlbaHost.For<Program>();
+        await using var host = await AlbaHost.For<Program>(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                var stubbedSupportSchedule = new Mock<IProvideSupportSchedule>();
+                stubbedSupportSchedule.Setup(sched => sched.InternalSupportAvailable).Returns(false);
+                services.AddScoped<IProvideSupportSchedule>((_) => stubbedSupportSchedule.Object);
+            });
+        });
 
         var response = await host.Scenario(api =>
         {

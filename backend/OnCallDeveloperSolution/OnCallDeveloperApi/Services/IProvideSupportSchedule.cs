@@ -1,7 +1,6 @@
-﻿namespace OnCallDeveloperApi.Services
+﻿namespace OnCallDeveloperApi.Services;
+
+public interface IProvideSupportSchedule
 {
-    public interface IProvideSupportSchedule
-    {
-        bool InternalSupportAvailable { get; }
-    }
+    bool InternalSupportAvailable { get; }
 }

@@ -18,7 +18,7 @@ public class StatusController : ControllerBase
     [HttpGet("/support")]
     public async Task<ActionResult> GetStatus()
     {
-        var sinceStartup = DateTime.Now - _clock.UpSince;
+        var sinceStartup =  DateTime.Now - _clock.UpSince;
         var response = new GetStatusResponse()
         {
                ContactInfo = new ContactInfo()
