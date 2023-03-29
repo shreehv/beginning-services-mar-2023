@@ -1,9 +1,12 @@
-﻿namespace LocationsApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+
+namespace LocationsApi.Models;
 
 
 public record LocationsResponse
 {
-    public List<LocationsResponse> _embedded { get; set; } = new();
+    public IReadOnlyList<LocationItemResponse>? _embedded { get; set; }
     public record LocationItemResponse
     {
         public string Id { get; init; } = string.Empty;
@@ -12,6 +15,8 @@ public record LocationsResponse
         public string AddedBy { get; init; } = string.Empty;
         public DateTime AddedOn { get; init; }
     }
+
+    
 }
 /*  {
     id: '1',
